@@ -16,3 +16,5 @@ $app->get('/', 'OAuthController@oauth');
 $app->get('/callback', 'OAuthController@callback');
 
 $app->get('/user', 'OAuthController@user');
+
+$app->get('/refresh', 'OAuthController@refresh');

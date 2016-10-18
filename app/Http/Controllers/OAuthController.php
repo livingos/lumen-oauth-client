@@ -25,7 +25,7 @@ class OAuthController extends Controller
          'client_id'     => 6,
          'redirect_uri'  => 'http://lumen.app/callback',
          'response_type' => 'code',
-         'scope'         => 'search',
+         'scope'         => '',
        ]);
 
       return redirect('http://laravel53.app/oauth/authorize?' . $query);
@@ -49,7 +49,7 @@ class OAuthController extends Controller
 
         //put in cache for now for trying out api routes below
         Cache::put('access_token', $tokens['access_token'], 60);
-        Cache::put('refresh_token', $tokens['access_token'], 60);
+        Cache::put('refresh_token', $tokens['refresh_token'], 60);
 
         return $tokens;
 
@@ -70,5 +70,29 @@ class OAuthController extends Controller
 
 
         return $response->getBody();
+    }
+
+    public function refresh()
+    {
+
+        $http = new Client;
+
+        $response = $http->post('http://laravel53.app/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => Cache::get('refresh_token'),
+                'client_id' => '6',
+                'client_secret' => '6HZTAgyG0BrzPHCZF8Ib27hKpfjCdq0feN3NZmgq',
+                'scope' => '',
+            ],
+        ]);
+
+        $tokens = json_decode((string)$response->getBody(), true);
+
+        //put in cache for now for trying out api routes below
+        Cache::put('access_token', $tokens['access_token'], 60);
+        Cache::put('refresh_token', $tokens['refresh_token'], 60);
+
+        return $tokens;
     }
 }
