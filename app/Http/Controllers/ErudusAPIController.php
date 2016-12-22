@@ -67,7 +67,7 @@ class ErudusAPIController extends Controller
         // just for now we are saving the token in cache
         $token = Cache::get('erudus_token');
         $http = new Client;
-        $response = $http->get('http://erudus-one.app/api/public/v1/products/'.$id.'/pdf/full', [
+        $response = $http->get('http://erudus-one.app/api/public/v1/products/'.$id.'/pdf', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept'       => 'application/pdf',
@@ -75,6 +75,12 @@ class ErudusAPIController extends Controller
             'sink' => storage_path().'/app/'.$id.'.pdf'
         ]);
 
-        return 'Saved in '.storage_path().'/app/'.$id.'.pdf';
+        dd($response);
+
+        $content = Storage::disk('local')->get($id.'.pdf' );
+
+        return response($content, 200)
+        ->header('Content-Type', 'application/pdf');
+
     }
 }
