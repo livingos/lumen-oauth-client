@@ -25,7 +25,7 @@ class OAuthController extends Controller
          'client_id'     => 6,
          'redirect_uri'  => 'http://lumen.app/callback',
          'response_type' => 'code',
-         'scope'         => '',
+         'scope'         => 'search',
        ]);
 
       return redirect('http://laravel53.app/oauth/authorize?' . $query);
@@ -64,9 +64,10 @@ class OAuthController extends Controller
         $response = $http->get('http://laravel53.app/api/user', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
-                'Accepts'       => 'application/json',
+                'Accept'       => 'application/json',
             ]
         ]);
+
 
 
         return $response->getBody();
@@ -83,7 +84,7 @@ class OAuthController extends Controller
                 'refresh_token' => Cache::get('refresh_token'),
                 'client_id' => '6',
                 'client_secret' => '6HZTAgyG0BrzPHCZF8Ib27hKpfjCdq0feN3NZmgq',
-                'scope' => '',
+                'scope' => 'supplier',
             ],
         ]);
 

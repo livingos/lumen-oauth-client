@@ -18,3 +18,8 @@ $app->get('/callback', 'OAuthController@callback');
 $app->get('/user', 'OAuthController@user');
 
 $app->get('/refresh', 'OAuthController@refresh');
+
+
+$app->get('/erudus', 'ErudusAPIController@oauth');
+$app->get('/erudus/{id}', 'ErudusAPIController@product');
+$app->get('/erudus/{id}/pdf', 'ErudusAPIController@pdf');
