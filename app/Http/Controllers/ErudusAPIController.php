@@ -26,8 +26,8 @@ class ErudusAPIController extends Controller
         $response = $http->post('http://erudus-one.app/api/access_token', [
             'form_params' => [
                 'grant_type'    => 'client_credentials',
-                'client_id'     => '1248c32d0ecb4d0fb3a3d77ffd6e96f9',
-                'client_secret' => '960e03ec9ae34f2887e94c3cfd57d376',
+                'client_id'     => 'ff85c26f0d9242148aefb3402bd1be6a',
+                'client_secret' => '2e15dcba19c643aea2db510fb2a51e2d',
                 'scope'          => 'PUBLIC'
             ],
         ]);
@@ -61,23 +61,21 @@ class ErudusAPIController extends Controller
     }
 
 
-    public function pdf($id)
+    public function pdf(Request $request, $id)
     {
 
         // just for now we are saving the token in cache
         $token = Cache::get('erudus_token');
         $http = new Client;
-        $response = $http->get('http://erudus-one.app/api/public/v1/products/'.$id.'/pdf', [
+        $response = $http->get('http://erudus-one.app/api/public/v1/products/'.$id.'/pdf?type='.$request->get('type','full'), [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept'       => 'application/pdf',
             ],
-            'sink' => storage_path().'/app/'.$id.'.pdf'
+            'sink' => storage_path().'/app/'.$request->get('type','full').'-'.$id.'.pdf'
         ]);
 
-        dd($response);
-
-        $content = Storage::disk('local')->get($id.'.pdf' );
+        $content = Storage::disk('local')->get($request->get('type','full').'-'.$id.'.pdf' );
 
         return response($content, 200)
         ->header('Content-Type', 'application/pdf');
